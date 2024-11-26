@@ -5,6 +5,8 @@ import google.generativeai as genai
 
 # establish AI agent 
 genai.configure(api_key=st.secrets['GEMINI_KEY'])
+config = genai.GenerationConfig(temperature=0.2)
+
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 if 'previous_advisement' not in st.session_state:
@@ -23,7 +25,7 @@ if uploaded_file is not None:
         st.session_state['previous_advisement'] = None
 
         with st.status("Your Advisement", expanded=True):
-            response = model.generate_content([advisment_prompt, DPR, OFFERINGS], stream=True)
+            response = model.generate_content([advisment_prompt, DPR, OFFERINGS], generation_config=config, stream=True)
 
             response_field = st.empty()
             advisement_text = ""
